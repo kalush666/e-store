@@ -13,6 +13,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1")
+@CrossOrigin(origins = "*")
 public class UserController {
 
     private final UserService service;
@@ -23,13 +24,23 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public User signUp(@RequestBody User user) {
-        return service.signUp(user);
+    public ResponseEntity<?> signUp(@RequestBody User user) {
+        try {
+            User createdUser = service.signUp(user);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+        } catch (EmailAlreadyTakenException ex) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+        }
     }
 
     @PostMapping("/login")
-    public User login(@RequestBody User user) {
-        return service.login(user);
+    public ResponseEntity<?> login(@RequestBody User user) {
+        try {
+            User loggedInUser = service.login(user);
+            return ResponseEntity.ok(loggedInUser);
+        } catch (InvalidCredentialsException ex) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+        }
     }
 
     @GetMapping("/test")

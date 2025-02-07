@@ -1,27 +1,31 @@
 /* App.css */
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
 body {
   font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f7fafc;
 }
 
 .min-h-screen {
   min-height: 100vh;
-}
-
-.bg-gray-100 {
-  background-color: #f7fafc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 .max-w-md {
-  max-width: 28rem;
-}
-
-.mt-10 {
-  margin-top: 2.5rem;
-}
-
-.px-4 {
-  padding-left: 1rem;
-  padding-right: 1rem;
+  max-width: 100%; /* Adjust this to your preference */
+  width: 100%;
+  padding: 0 1rem; /* Add padding to prevent content from touching the edges */
 }
 
 .bg-white {
@@ -34,7 +38,7 @@ body {
 
 .shadow-lg {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-  0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 .p-6 {
@@ -115,7 +119,6 @@ body {
 .focus\:outline-none:focus {
   outline: 0;
 }
-
 .focus\:border-blue-500:focus {
   border-color: #4299e1;
 }
@@ -134,7 +137,7 @@ body {
 
 .transition-colors {
   transition-property: color, background-color, border-color,
-  text-decoration-color, fill, stroke;
+    text-decoration-color, fill, stroke;
   transition-duration: 150ms;
 }
 
@@ -154,6 +157,7 @@ body {
   color: #3182ce;
 }
 
+input[type="name"],
 input[type="email"],
 input[type="password"] {
   width: calc(100% - 3rem); /* Adjust width to fit within the container */
@@ -166,6 +170,7 @@ input[type="password"] {
   outline: none;
   margin: 0 auto; /* Center the input fields */
 }
+
 input[type="email"]:focus,
 input[type="password"]:focus {
   border-color: #4299e1;

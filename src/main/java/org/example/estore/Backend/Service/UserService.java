@@ -5,6 +5,8 @@ import org.example.estore.Backend.Exceptions.EmailAlreadyTakenException;
 import org.example.estore.Backend.Exceptions.InvalidCredentialsException;
 import org.example.estore.Backend.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -12,10 +14,12 @@ import java.util.Optional;
 @Service
 public class UserService {
     private final UserRepository repository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository repository) {
+    public UserService(UserRepository repository,PasswordEncoder passwordEncoder) {
         this.repository = repository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User signUp(User user){

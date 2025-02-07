@@ -1,26 +1,45 @@
 import React, { useState } from "react";
-import NavigationBar from "./NavigationBar"; // Ensure this path and name are correct
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import NavigationBar from "./NavigationBar";
 import LoginForm from "./LoginForm";
 import SignupForm from "./SignupForm";
-import "./App.css"; // Ensure this path is correct
+import StoreFront from "./StoreFront";
+import "./App.css";
 
 const App = () => {
   const [activeForm, setActiveForm] = useState("login");
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <NavigationBar onAuthChange={setActiveForm} />{" "}
-      {/* Ensure this is rendered correctly */}
-      <div className="max-w-md mx-auto mt-10 px-4">
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          {activeForm === "login" ? (
-            <LoginForm onSwitchToSignup={() => setActiveForm("signup")} />
-          ) : (
-            <SignupForm onSwitchToLogin={() => setActiveForm("login")} />
-          )}
+    <Router>
+      <div className="min-h-screen bg-gray-100">
+        <NavigationBar onAuthChange={setActiveForm} />
+        <div className="max-w-md mx-auto mt-10 px-4">
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <Routes>
+              <Route path="/" element={<Navigate to="/login" />} />
+              <Route
+                path="/login"
+                element={
+                  <LoginForm onSwitchToSignup={() => setActiveForm("signup")} />
+                }
+              />
+              <Route
+                path="/signup"
+                element={
+                  <SignupForm onSwitchToLogin={() => setActiveForm("login")} />
+                }
+              />
+              <Route path="/storefront" element={<StoreFront />} />
+            </Routes>
+          </div>
         </div>
       </div>
-    </div>
+    </Router>
   );
 };
 

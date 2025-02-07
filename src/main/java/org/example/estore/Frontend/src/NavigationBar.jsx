@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-const NavigationBar = ({ onAuthChange }) => {
+const NavigationBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -14,25 +16,6 @@ const NavigationBar = ({ onAuthChange }) => {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
             <span className="text-xl font-bold text-gray-800">YourApp</span>
-          </div>
-
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-4">
-            <button
-              className="text-gray-600 hover:text-gray-800 px-3 py-2 rounded-md"
-              onClick={() => onAuthChange("login")}
-            >
-              Login
-            </button>
-            <button
-              className="text-gray-600 hover:text-gray-800 px-3 py-2 rounded-md"
-              onClick={() => onAuthChange("signup")}
-            >
-              Sign Up
-            </button>
-            <button className="text-gray-600 hover:text-gray-800 px-3 py-2 rounded-md">
-              About
-            </button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -54,7 +37,7 @@ const NavigationBar = ({ onAuthChange }) => {
             <button
               className="block w-full text-left px-3 py-2 rounded-md text-gray-600 hover:text-gray-800 hover:bg-gray-100"
               onClick={() => {
-                onAuthChange("login");
+                navigate("/login");
                 setIsMenuOpen(false);
               }}
             >
@@ -63,13 +46,19 @@ const NavigationBar = ({ onAuthChange }) => {
             <button
               className="block w-full text-left px-3 py-2 rounded-md text-gray-600 hover:text-gray-800 hover:bg-gray-100"
               onClick={() => {
-                onAuthChange("signup");
+                navigate("/signup");
                 setIsMenuOpen(false);
               }}
             >
               Sign Up
             </button>
-            <button className="block w-full text-left px-3 py-2 rounded-md text-gray-600 hover:text-gray-800 hover:bg-gray-100">
+            <button
+              className="block w-full text-left px-3 py-2 rounded-md text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+              onClick={() => {
+                navigate("/about");
+                setIsMenuOpen(false);
+              }}
+            >
               About
             </button>
           </div>

@@ -1,13 +1,16 @@
 import React, { useState } from "react";
-import { User, Mail, Lock } from "lucide-react";
+import axios from "axios";
+import CryptoJS from "crypto-js";
+import { useNavigate } from "react-router-dom";
 
-const SignupForm = ({ onSwitchToLogin }) => {
+const SignupForm = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     setFormData({
@@ -16,98 +19,90 @@ const SignupForm = ({ onSwitchToLogin }) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle signup logic here
-    console.log("Signup submitted:", formData);
+
+    const { name, email, password, confirmPassword } = formData;
+    if (confirmPassword !== password) {
+      alert("Passwords do not match");
+      return;
+    }
+
+    try {
+      const hashedPassword = CryptoJS.SHA256(password).toString();
+      const response = await axios.post("http://localhost:8080/api/v1/signup", {
+        name,
+        email,
+        password: hashedPassword,
+      });
+
+      if (response.status === 200) {
+        alert("Signup successful");
+        navigate("/storefront");
+      }
+    } catch (error) {
+      console.error("Signup failed:", error);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Sign Up</h2>
-
-      <div className="space-y-2">
-        <label className="block text-gray-700">Name</label>
-        <div className="relative">
-          <User className="absolute left-3 top-3 text-gray-400" size={20} />
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleInputChange}
-            className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
-            placeholder="Enter your name"
-            required
-          />
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <label className="block text-gray-700">Email</label>
-        <div className="relative">
-          <Mail className="absolute left-3 top-3 text-gray-400" size={20} />
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
-            placeholder="Enter your email"
-            required
-          />
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <label className="block text-gray-700">Password</label>
-        <div className="relative">
-          <Lock className="absolute left-3 top-3 text-gray-400" size={20} />
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleInputChange}
-            className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
-            placeholder="Enter your password"
-            required
-          />
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <label className="block text-gray-700">Confirm Password</label>
-        <div className="relative">
-          <Lock className="absolute left-3 top-3 text-gray-400" size={20} />
-          <input
-            type="password"
-            name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleInputChange}
-            className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
-            placeholder="Confirm your password"
-            required
-          />
-        </div>
-      </div>
-
-      <button
-        type="submit"
-        className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors"
-      >
-        Sign Up
-      </button>
-
-      <p className="text-center text-gray-600">
-        Already have an account?{" "}
+    <div className="container">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">Signup</h2>
+        <input
+          type="text"
+          name="name"
+          className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+          placeholder="Enter your name"
+          required
+          value={formData.name}
+          onChange={handleInputChange}
+        />
+        <input
+          type="email"
+          name="email"
+          className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+          placeholder="Enter your email"
+          required
+          value={formData.email}
+          onChange={handleInputChange}
+        />
+        <input
+          type="password"
+          name="password"
+          className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+          placeholder="Enter your password"
+          required
+          value={formData.password}
+          onChange={handleInputChange}
+        />
+        <input
+          type="password"
+          name="confirmPassword"
+          className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+          placeholder="Confirm your password"
+          required
+          value={formData.confirmPassword}
+          onChange={handleInputChange}
+        />
         <button
-          type="button"
-          onClick={onSwitchToLogin}
-          className="text-blue-500 hover:text-blue-600"
+          type="submit"
+          className="w-full bg-blue-500 text-white py-2 rounded-lg"
         >
-          Login
+          Signup
         </button>
-      </p>
-    </form>
+        <p className="text-center text-gray-600 mt-4">
+          Already have an account?{" "}
+          <button
+            type="button"
+            className="text-blue-500 hover:text-blue-600"
+            onClick={() => navigate("/login")}
+          >
+            Login
+          </button>
+        </p>
+      </form>
+    </div>
   );
 };
 
