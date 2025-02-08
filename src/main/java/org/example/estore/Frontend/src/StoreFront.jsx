@@ -1,28 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./StoreFront.css";
+import axios from "axios";
 
 const StoreFront = () => {
-  const products = [
-    {
-      id: 1,
-      name: "Wireless Headphones",
-      price: 149.99,
-      description:
-        "Premium noise-canceling wireless headphones with 30hr battery",
-    },
-    {
-      id: 2,
-      name: "Smart Fitness Watch",
-      price: 199.99,
-      description: "Health monitoring with GPS and heart rate tracking",
-    },
-    {
-      id: 3,
-      name: "4K Camera Drone",
-      price: 299.99,
-      description: "Professional aerial photography drone with 4K camera",
-    },
-  ];
+  const [products, setProducts] = useState([]);
+
+  const getAllProducts = async () => {
+    try {
+      const response = await axios("http://localhost:8080/api/v1/getall", {
+        id,
+        name,
+        imageURL,
+        description,
+        price,
+      });
+
+      if (response.status === 200) {
+        setProducts(response.data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    }
+  };
+
+  useEffect(() => {
+    getAllProducts();
+  }, []);
 
   return (
     <div className="store-container">
