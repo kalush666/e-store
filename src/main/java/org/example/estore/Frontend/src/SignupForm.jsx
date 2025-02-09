@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import CryptoJS from "crypto-js";
 import { useNavigate } from "react-router-dom";
+import "./App.css";
 
 const SignupForm = () => {
   const [formData, setFormData] = useState({
