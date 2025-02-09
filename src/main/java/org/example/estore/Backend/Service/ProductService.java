@@ -16,10 +16,11 @@ public class ProductService {
         this.repository = repository;
     }
 
-    public List<Product> getAllProducts(){
+    public List<Product> getAllProducts() {
         return repository.findAll();
     }
 
-
-
+    public Product getProductById(Long id) {
+        return repository.findById(id).orElse(null);
+    }
 }

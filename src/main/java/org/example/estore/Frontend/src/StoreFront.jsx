@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./StoreFront.css";
 import axios from "axios";
 
@@ -7,16 +7,13 @@ const StoreFront = () => {
 
   const getAllProducts = async () => {
     try {
-      const response = await axios("http://localhost:8080/api/v1/getall", {
-        id,
-        name,
-        imageURL,
-        description,
-        price,
-      });
+      const response = await axios.get("http://localhost:8080/api/v1/getall");
 
       if (response.status === 200) {
-        setProducts(response.data);
+        const allProducts = response.data;
+        const shuffledProducts = allProducts.sort(() => 0.5 - Math.random());
+        const limitedProducts = shuffledProducts.slice(0, 9);
+        setProducts(limitedProducts);
       }
     } catch (error) {
       console.error("Failed to fetch products:", error);
@@ -26,6 +23,10 @@ const StoreFront = () => {
   useEffect(() => {
     getAllProducts();
   }, []);
+
+  const handleAddToCart = (productId) => {
+    document.querySelector(".cart-count").textContent++;
+  };
 
   return (
     <div className="store-container">
@@ -54,11 +55,18 @@ const StoreFront = () => {
         <div className="product-list">
           {products.map((product) => (
             <div key={product.id} className="product-card">
+              <img
+                src={product.imageURL}
+                alt={product.name}
+                className="product-image"
+              />
               <h2>{product.name}</h2>
               <p>{product.description}</p>
               <div className="product-footer">
                 <span className="price">${product.price.toFixed(2)}</span>
-                <button className="add-to-cart">Add to Cart</button>
+                <button className="add-to-cart" onClick={handleAddToCart}>
+                  Add to Cart
+                </button>
               </div>
             </div>
           ))}

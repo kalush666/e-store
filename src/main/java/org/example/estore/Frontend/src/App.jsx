@@ -18,26 +18,30 @@ const App = () => {
     <Router>
       <div className="min-h-screen bg-gray-100">
         <NavigationBar onAuthChange={setActiveForm} />
-        <div className="max-w-md mx-auto mt-10 px-4">
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <Routes>
-              <Route path="/" element={<Navigate to="/login" />} />
-              <Route
-                path="/login"
-                element={
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" />} />
+          <Route
+            path="/login"
+            element={
+              <div className="max-w-md mx-auto mt-10 px-4">
+                <div className="bg-white rounded-lg shadow-lg p-6">
                   <LoginForm onSwitchToSignup={() => setActiveForm("signup")} />
-                }
-              />
-              <Route
-                path="/signup"
-                element={
+                </div>
+              </div>
+            }
+          />
+          <Route
+            path="/signup"
+            element={
+              <div className="max-w-md mx-auto mt-10 px-4">
+                <div className="bg-white rounded-lg shadow-lg p-6">
                   <SignupForm onSwitchToLogin={() => setActiveForm("login")} />
-                }
-              />
-              <Route path="/storefront" element={<StoreFront />} />
-            </Routes>
-          </div>
-        </div>
+                </div>
+              </div>
+            }
+          />
+          <Route path="/storefront" element={<StoreFront />} />
+        </Routes>
       </div>
     </Router>
   );
