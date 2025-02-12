@@ -43,9 +43,14 @@ public class UserController {
         }
     }
 
-    @GetMapping("/test")
-    public Map<String, String> test() {
-        return Map.of("message", "Controller is working!");
+    @GetMapping("/findbyid")
+    public ResponseEntity<?> findById(@RequestParam Long id) {
+        try {
+            User user = service.findById(id);
+            return ResponseEntity.ok(user);
+        } catch (InvalidCredentialsException ex) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+        }
     }
 
     @ExceptionHandler(EmailAlreadyTakenException.class)

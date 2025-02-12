@@ -38,4 +38,11 @@ public class UserService {
             return userByEmail.get();
         throw new InvalidCredentialsException("invalid email or password");
     }
+
+    public User findById(Long id){
+        Optional<User> userById = repository.findById(id);
+        if (userById.isPresent())
+            return userById.get();
+        throw new InvalidCredentialsException("invalid id");
+    }
 }

@@ -4,9 +4,7 @@ import org.example.estore.Backend.Entity.Cart;
 import org.example.estore.Backend.Service.CartService;
 import org.example.estore.Backend.Service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,5 +27,19 @@ public class CartController {
     @GetMapping("/getallcarts")
     public List<Cart> getAllCarts() {
         return service.getAllCarts();
+    }
+
+    @GetMapping("/getcartbyuserid")
+    public Cart getCartByUserId(@RequestParam Long userId) {
+        Cart cart = service.getCartByUserId(userId);
+        if (cart == null) {
+            cart = service.createCart(userId);
+        }
+        return cart;
+    }
+
+    @PostMapping("/savecart")
+    public void saveCart(Cart cart) {
+        service.saveCart(cart);
     }
 }

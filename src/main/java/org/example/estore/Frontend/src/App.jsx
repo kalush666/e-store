@@ -9,7 +9,9 @@ import NavigationBar from "./NavigationBar";
 import LoginForm from "./LoginForm";
 import SignupForm from "./SignupForm";
 import StoreFront from "./StoreFront";
+import Cart from "./Cart";
 import "./App.css";
+import Profile from "./Profile";
 
 const App = () => {
   const [activeForm, setActiveForm] = useState("login");
@@ -41,6 +43,8 @@ const App = () => {
             }
           />
           <Route path="/storefront" element={<StoreFront />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </div>
     </Router>

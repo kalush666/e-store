@@ -38,6 +38,8 @@ const SignupForm = () => {
       });
 
       if (response.status === 200) {
+        const userId = response.data.id;
+        localStorage.setItem("userId", userId);
         alert("Signup successful");
         navigate("/storefront");
       }

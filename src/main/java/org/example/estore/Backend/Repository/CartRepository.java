@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface CartRepository extends MongoRepository<Cart, Long> {
 
     Optional<Cart> findById(Long id);
+    Optional<Cart> findByUserId(Long userId);
 }

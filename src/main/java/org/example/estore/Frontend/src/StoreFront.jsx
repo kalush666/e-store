@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./StoreFront.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const StoreFront = () => {
   const [products, setProducts] = useState([]);
+  const [cart, setCart] = useState({ id: "", userId: "", products: [] });
+  const navigate = useNavigate();
 
   const getAllProducts = async () => {
     try {
@@ -20,12 +23,46 @@ const StoreFront = () => {
     }
   };
 
+  const getCart = async (userId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/v1/getcartbyuserid?userId=${userId}`
+      );
+      if (response.status === 200) {
+        const cartData = response.data;
+        setCart(cartData);
+        localStorage.setItem("cart", JSON.stringify(cartData));
+      }
+    } catch (error) {
+      console.error("Failed to fetch cart items:", error);
+    }
+  };
+
   useEffect(() => {
     getAllProducts();
+    const userId = localStorage.getItem("userId");
+    if (userId) {
+      getCart(userId);
+    }
   }, []);
 
-  const handleAddToCart = (productId) => {
-    document.querySelector(".cart-count").textContent++;
+  const handleAddToCart = (product) => {
+    setCart((prevCart) => {
+      const updatedCart = {
+        ...prevCart,
+        products: [...prevCart.products, product],
+      };
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+      return updatedCart;
+    });
+  };
+
+  const handleProfileClick = () => {
+    navigate("/profile");
+  };
+
+  const handleCartClick = () => {
+    navigate("/cart");
   };
 
   return (
@@ -41,9 +78,11 @@ const StoreFront = () => {
               className="search-bar"
             />
             <div className="icons">
-              <button className="icon">👤</button>
-              <button className="icon cart">
-                🛒<span className="cart-count">0</span>
+              <button className="icon" onClick={handleProfileClick}>
+                👤
+              </button>
+              <button className="icon cart" onClick={handleCartClick}>
+                🛒<span className="cart-count">{cart.products.length}</span>
               </button>
             </div>
           </div>
@@ -64,7 +103,10 @@ const StoreFront = () => {
               <p>{product.description}</p>
               <div className="product-footer">
                 <span className="price">${product.price.toFixed(2)}</span>
-                <button className="add-to-cart" onClick={handleAddToCart}>
+                <button
+                  className="add-to-cart"
+                  onClick={() => handleAddToCart(product)}
+                >
                   Add to Cart
                 </button>
               </div>
